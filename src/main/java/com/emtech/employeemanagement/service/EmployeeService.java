@@ -6,7 +6,9 @@ import com.emtech.employeemanagement.data.employeedata.EmployeeResponse;
 import com.emtech.employeemanagement.model.employee.Employee;
 import com.emtech.employeemanagement.repos.DepartmentRepository;
 import com.emtech.employeemanagement.repos.EmployeeRepository;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,21 +20,17 @@ import java.util.logging.Level;
 
 @Service
 @Log
+@RequiredArgsConstructor
 public class EmployeeService {
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
 
-    @Autowired
-    private DepartmentService departmentService;
-
-    @Autowired
-    private DepartmentRepository departmentRepository;
 
     public EntityResponse addEmployee(@NonNull String name, @NonNull String email, String departmentName){
         AtomicReference<EntityResponse> response = new AtomicReference<>();
 
         employeeRepository.findByEmail(email).ifPresentOrElse(employee -> {
-            log.log(Level.WARNING, "Employee with email %s already exists", email);
+            log.log(Level.WARNING, String.format("Employee with email %s already exists", email));
 
             response.set(EntityResponse.builder()
                     .message("Employee with email " + email + " already exists")
