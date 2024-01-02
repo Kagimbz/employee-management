@@ -3,28 +3,24 @@ package com.emtech.employeemanagement;
 import com.emtech.employeemanagement.data.EntityResponse;
 import com.emtech.employeemanagement.data.departmentdata.DepartmentCreateRequest;
 import com.emtech.employeemanagement.data.employeedata.AddEmployeeRequest;
-import com.emtech.employeemanagement.model.department.Department;
-import com.emtech.employeemanagement.repos.DepartmentRepository;
+import com.emtech.employeemanagement.model.employee.Employee;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class EmployeeManagementApplicationTests {
@@ -46,6 +42,7 @@ class EmployeeManagementApplicationTests {
 	public void setUp() {
 		baseUrl = baseUrl + port + "/api/v1/employees";
 		baseUrl2 = baseUrl2 + port + "/api/v1/departments";
+		h2Repo.deleteAll();
 	}
 
 	@Test
@@ -53,7 +50,6 @@ class EmployeeManagementApplicationTests {
 		//Given
 		AddEmployeeRequest requestBody = new AddEmployeeRequest("Newts Kags", "nkags@gmail.com", "Software Dev");
 		DepartmentCreateRequest requestBody2 = new DepartmentCreateRequest("Software Dev", 1);
-		h2Repo.deleteAll();
 
 		//When
 		ResponseEntity<EntityResponse> deptResponseEntity = restTemplate.postForEntity(baseUrl2 + "/new-department", requestBody2, EntityResponse.class);
@@ -65,6 +61,19 @@ class EmployeeManagementApplicationTests {
 		assertThat(entityResponse).isNotNull();
 		assertThat(entityResponse.getMessage()).isEqualTo("Employee added successfully");
 		assertThat(entityResponse.getStatusCode()).isEqualTo(201);
+		assertThat(h2Repo.findAll().size()).isEqualTo(1);
+	}
+
+	@Test
+	public void testFindAllEmployees() {
+		//Given
+		//When
+		ResponseEntity<List<Employee>> responseEntity = restTemplate.exchange(baseUrl + "/all", HttpMethod.GET, null, new ParameterizedTypeReference<List<Employee>>() {});
+
+		//Then
+		assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
+		List<Employee> allEmployees = responseEntity.getBody();
+		assertThat(allEmployees.size()).isEqualTo(1);
 		assertThat(h2Repo.findAll().size()).isEqualTo(1);
 	}
 

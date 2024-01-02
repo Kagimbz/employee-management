@@ -20,7 +20,7 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/all")
-    public ResponseEntity<?> findAllEmployees(){
+    public ResponseEntity<List<Employee>> findAllEmployees(){
         List<Employee> allEmployees = employeeService.getAllEmployees();
         return ResponseEntity.ok().body(allEmployees);
     }
