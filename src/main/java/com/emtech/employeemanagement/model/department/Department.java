@@ -18,7 +18,7 @@ import java.util.List;
 @ToString
 @Data
 @Entity
-@Table(name = "Department", uniqueConstraints = {
+@Table(name = "department", uniqueConstraints = {
         @UniqueConstraint(name = "department_id", columnNames = "id"),
         @UniqueConstraint(name = "department_name", columnNames = "departmentName"),
         @UniqueConstraint(name = "department_code", columnNames = "code")
