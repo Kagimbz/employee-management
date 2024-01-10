@@ -72,6 +72,6 @@ public class PersistenceProperties {
     @Value(value = "${com.emtech.employeemanagement.config.properties.persistence.cache.prepare.statements.size}")
     private Long cachePrepareStatementsSize;
 
-    @Value(value = "${com.emtech.employeemanagement.config.properties.persistence.ca4che.prepare.statements.sql.limit}")
+    @Value(value = "${com.emtech.employeemanagement.config.properties.persistence.cache.prepare.statements.sql.limit}")
     private Long cachePrepareStatementsSqlLimit;
 }
