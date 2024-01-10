@@ -1,4 +1,4 @@
-package com.emtech.employeemanagement.config;
+package com.emtech.employeemanagement.config.security;
 
 import com.emtech.employeemanagement.auth.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers()
+                .antMatchers("/api/v1/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
