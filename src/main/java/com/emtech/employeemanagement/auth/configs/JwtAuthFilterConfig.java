@@ -1,4 +1,4 @@
-package com.emtech.employeemanagement.config.security;
+package com.emtech.employeemanagement.auth.configs;
 
 import com.emtech.employeemanagement.auth.users.UserRepository;
 import lombok.RequiredArgsConstructor;
