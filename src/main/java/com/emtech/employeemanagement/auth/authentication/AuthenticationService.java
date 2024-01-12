@@ -4,6 +4,7 @@ import com.emtech.employeemanagement.auth.authentication.dto.AuthResponse;
 import com.emtech.employeemanagement.auth.authentication.dto.AuthenticationRequest;
 import com.emtech.employeemanagement.auth.authentication.dto.RegistrationRequest;
 import com.emtech.employeemanagement.auth.jwt.JwtService;
+import com.emtech.employeemanagement.auth.roles.Role;
 import com.emtech.employeemanagement.auth.users.User;
 import com.emtech.employeemanagement.auth.users.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class AuthenticationService {
                         .lastName(request.getLastName())
                         .email(request.getEmail())
                         .password(passwordEncoder.encode(request.getEmail()))
+                        .role(Role.ADMIN)
                 .build();
         repository.save(user);
         var jwt = jwtService.generateToken(user);

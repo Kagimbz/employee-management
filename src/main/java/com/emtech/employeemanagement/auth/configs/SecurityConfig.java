@@ -1,4 +1,4 @@
-package com.emtech.employeemanagement.config.security;
+package com.emtech.employeemanagement.auth.configs;
 
 import com.emtech.employeemanagement.auth.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +24,10 @@ public class SecurityConfig {
         http
                 .csrf()
                 .disable()
-                .authorizeHttpRequests()
-                .antMatchers("/api/v1/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
+                .authorizeHttpRequests((auth) -> auth
+                        .mvcMatchers("/api/v1/auth/**").permitAll()
+                        .mvcMatchers("/swagger-ui/#").permitAll()
+                )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
